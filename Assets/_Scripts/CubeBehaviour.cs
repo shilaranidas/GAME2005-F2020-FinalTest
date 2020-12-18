@@ -63,17 +63,19 @@ public class CubeBehaviour : MonoBehaviour
     private MeshFilter meshFilter;
     public Bounds bounds;
     public bool isGrounded;
-
+    public RigidBody3D rb;//= new RigidBody3D();
 
     // Start is called before the first frame update
     void Start()
     {
         debug = false;
         meshFilter = GetComponent<MeshFilter>();
-
+        rb=GetComponent<RigidBody3D>();
         bounds = meshFilter.mesh.bounds;
         size = bounds.size;
-
+        rb.restitution=0.1f;
+        rb.friction=0.1f;
+        rb.mass=2.0f;
     }
 
     // Update is called once per frame
@@ -81,7 +83,8 @@ public class CubeBehaviour : MonoBehaviour
     {
         max = Vector3.Scale(bounds.max, transform.localScale) + transform.position;
         min = Vector3.Scale(bounds.min, transform.localScale) + transform.position;
-
+       // rb.velocity+=rb.acceleration*Time.deltaTime;
+        //transform.position+=rb.velocity*Time.deltaTime;
     }
 
     private void OnDrawGizmos()

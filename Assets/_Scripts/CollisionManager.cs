@@ -70,6 +70,7 @@ public class CollisionManager : MonoBehaviour
 
         if ((distance < s.radius) && (!s.isColliding))
         {
+            
             // determine the distances between the contact extents
             float[] distances = {
                 (b.max.x - s.transform.position.x),
@@ -96,9 +97,29 @@ public class CollisionManager : MonoBehaviour
 
             s.penetration = penetration;
             s.collisionNormal = face;
-            //s.isColliding = true;
-
-            
+            s.isColliding = true;
+            //calculate Vr=Vb-Va
+           // Vector3 Vr = b.rb.velocity - s.rb.velocity;
+            //nr=vr.n
+                        
+          /*  float Nr=Vector3.Dot(Vr,s.collisionNormal.normalized);
+            //coefficient of restituion e=min(ea,eb)
+            float e=Mathf.Min(b.rb.restitution,s.rb.restitution);
+            //impulse j=-(1+e)(vr.n)/((1/ma)+(1/mb))
+            float j=-(1+e)*Nr/((1/b.rb.mass)+(1/s.rb.mass));
+            //tangent vector,t=vr-(vr.n)n=vr-Nr*n
+            Vector3 t=Vr-Nr*s.collisionNormal;
+            //magniture of impulse, jt=-(1+e)(vr.t)/((1/ma)+(1/mb))
+            float jt=-(1+e)*Vector3.Dot(Vr,t)/((1/b.rb.mass)+(1/s.rb.mass));
+            //friction=sqrt(frictionA,frictionB)
+            float friction=Mathf.Sqrt(b.rb.friction*s.rb.friction);
+            //jt=max(jt,-j*friction)
+            jt=Mathf.Max(jt, -j*friction);
+            //jt=min(jt,j*friction)
+            jt=Mathf.Min(jt, j*friction);
+            //va'=va-jn/ma
+            b.rb.velocity=b.rb.velocity-jt*s.collisionNormal.normalized/b.rb.mass;
+            s.rb.velocity=s.rb.velocity-jt*s.collisionNormal.normalized/s.rb.mass;*/
             Reflect(s);
         }
 
@@ -124,6 +145,7 @@ public class CollisionManager : MonoBehaviour
 
     public static void CheckAABBs(CubeBehaviour a, CubeBehaviour b)
     {
+        //collision manifold
         Contact contactB = new Contact(b);
 
         if ((a.min.x <= b.max.x && a.max.x >= b.min.x) &&
@@ -131,6 +153,7 @@ public class CollisionManager : MonoBehaviour
             (a.min.z <= b.max.z && a.max.z >= b.min.z))
         {
             // determine the distances between the contact extents
+            //collision manifold
             float[] distances = {
                 (b.max.x - a.min.x),
                 (a.max.x - b.min.x),

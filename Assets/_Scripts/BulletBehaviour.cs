@@ -15,11 +15,17 @@ public class BulletBehaviour : MonoBehaviour
     public float penetration;
 
     public BulletManager bulletManager;
+    //public RigidBody3D rb ;//= new RigidBody3D();
 
     // Start is called before the first frame update
     void Start()
     {
         isColliding = false;
+       // var rb=gameObject.GetComponent<RigidBody3D>();
+      //  rb.restitution=0.1f;
+        //rb.friction=0.1f;
+      //  rb.mass=3.0f;
+        
         radius = Mathf.Max(transform.localScale.x, transform.localScale.y, transform.localScale.z) * 0.5f;
         bulletManager = FindObjectOfType<BulletManager>();
     }
@@ -33,6 +39,8 @@ public class BulletBehaviour : MonoBehaviour
 
     private void _Move()
     {
+        // rb.velocity+=direction * speed*Time.deltaTime;
+        
         transform.position += direction * speed * Time.deltaTime;
     }
 

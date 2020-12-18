@@ -41,11 +41,10 @@
      <Compile Include="Assets\_Scripts\RigidBody3D.cs" />
      <Compile Include="Assets\_Scripts\CollisionManager.cs" />
      <Compile Include="Assets\_Scripts\BulletManager.cs" />
+     <Compile Include="Assets\_Scripts\SceneManager.cs" />
      <Compile Include="Assets\_Scripts\MouseLook.cs" />
      <Compile Include="Assets\_Scripts\PlayerBehaviour.cs" />
      <Compile Include="Assets\_Scripts\CubeBehaviour.cs" />
-     <Compile Include="Assets\_Scripts\ButtonHandler.cs" />
-     <Compile Include="Assets\_Scripts\SceneManager.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
