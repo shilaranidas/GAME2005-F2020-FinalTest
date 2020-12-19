@@ -31,18 +31,18 @@ public class PlayerBehaviour : MonoBehaviour
     {
         _Fire();
         _Move();
-         _StartScene();
+        _StartScene();
     }
-private void _StartScene()
-{
-    if (Input.GetKeyDown(KeyCode.Backspace))
+    private void _StartScene()
+    {
+        if (Input.GetKeyDown(KeyCode.Backspace))
         {
-            
+
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
         }
-}
+    }
     private void _Move()
     {
         if (isGrounded)
@@ -65,7 +65,7 @@ private void _StartScene()
                 body.velocity = playerCam.transform.forward * speed * Time.deltaTime;
             }
 
-            if (Input.GetAxisRaw("Vertical") < 0.0f) 
+            if (Input.GetAxisRaw("Vertical") < 0.0f)
             {
                 // move Back
                 body.velocity = -playerCam.transform.forward * speed * Time.deltaTime;
@@ -73,11 +73,11 @@ private void _StartScene()
 
             body.velocity = Vector3.Lerp(body.velocity, Vector3.zero, 0.9f);
             body.velocity = new Vector3(body.velocity.x, 0.0f, body.velocity.z); // remove y
-            
+
 
             if (Input.GetAxisRaw("Jump") > 0.0f)
             {
-                body.velocity = transform.up * speed * 0.1f * Time.deltaTime;
+                body.velocity = transform.up * speed * 0.05f * Time.deltaTime;
             }
 
             transform.position += body.velocity;

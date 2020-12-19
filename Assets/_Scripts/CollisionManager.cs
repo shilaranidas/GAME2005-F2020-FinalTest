@@ -28,7 +28,8 @@ public class CollisionManager : MonoBehaviour
     void Update()
     {
         spheres = FindObjectsOfType<BulletBehaviour>();
-
+        //for dynamic bullet include
+       // cubes = FindObjectsOfType<CubeBehaviour>();
         // check each AABB with every other AABB in the scene
         for (int i = 0; i < cubes.Length; i++)
         {
@@ -40,7 +41,7 @@ public class CollisionManager : MonoBehaviour
                 }
             }
         }
-        bool r = false;
+        //bool r = false;
         // Check each sphere against each AABB in the scene
         //foreach (var s in spheres)
         for (int k = 0; k < spheres.Length; k++)
@@ -52,47 +53,75 @@ public class CollisionManager : MonoBehaviour
                 var b = cubes[i];
                 if (b.name != "Player")
                 {
-                    r = false;
-                    CheckSphereAABB(s, b, out r);
+                    CheckAABBCube(s,b);
+                    //r = false;
+                   // CheckSphereAABB(s, b);//, out r);
                     //calculate Vr=Vb-Va
                     // Vector3 Vr = b.rb.velocity - s.rb.velocity;
-                    if (r)
-                    {
-                        Vector3 Vr = b.rb.velocity - s.vel;
-                       // Debug.Log("rel vel " + Vr);
-                        //nr=vr.n;
-                        //If this magnitude is greater than zero, the objects are moving away from each other and we can't apply any impulse.
-                        float Nr = Vector3.Dot(Vr, s.collisionNormal.normalized);
-                        Debug.Log("NR"+Nr);
-                        if(Nr>0.0f)
-                        {
-                            //no impulse
-                            //coefficient of restituion e=min(ea,eb)
-                        
-                        
-                        }
-                        float e = Mathf.Min(b.rb.restitution, s.restitution);
-                        //impulse j=-(1+e)(vr.n)/((1/ma)+(1/mb))
-                        float j = -(1 + e) * Nr / ((1 / b.rb.mass) + (1 / s.mass));
-                        //tangent vector,t=vr-(vr.n)n=vr-Nr*n
-                        Vector3 t = Vr - Nr * s.collisionNormal;
-                        //magniture of impulse, jt=-(1+e)(vr.t)/((1/ma)+(1/mb))
-                        float jt = -(1 + e) * Vector3.Dot(Vr, t) / ((1 / b.rb.mass) + (1 / s.mass));
-                        //friction=sqrt(frictionA,frictionB)
-                        float friction = Mathf.Sqrt(b.rb.friction * s.friction);
-                        //jt=max(jt,-j*friction)
-                        jt = Mathf.Max(jt, -j * friction);
-                        //jt=min(jt,j*friction)
-                        jt = Mathf.Min(jt, j * friction);
-                        //va'=va-jn/ma
-                        //write to object
-                      //  cubes[i].rb.velocity 
-                        //b.rb.velocity= b.rb.velocity - jt * s.collisionNormal.normalized / b.rb.mass;
+                   // if (r)
+                  //  {
 
-                        Debug.Log("cube vel " + b.rb.velocity+ " "+b.rb.velocity.magnitude);
-                        
-                       // spheres[k].vel = s.vel - jt * s.collisionNormal.normalized / s.mass;
-                    }
+                        // float v1 = Mathf.Abs(Vector3.Dot(s.vel, s.collisionNormal));
+                        //  float v2 = Mathf.Abs(Vector3.Dot(b.rb.velocity, s.collisionNormal));
+
+                        ////  float prop1 = v1 / (v1 + v2);
+                        //   float prop2 = v2 / (v1 + v2);
+                        //  if ((v1 + v2) == 0.0f)
+                        //      prop1 = prop2 = 0.0f;
+
+                        //  s.transform.position = s.transform.position + s.collisionNormal *  prop1;
+
+                        //   if (!b.isGrounded)
+                        //     b.transform.position = b.transform.position - s.collisionNormal *  prop2;
+
+
+                        // Vector3 Vr = b.rb.velocity - s.vel;
+
+                        // // Debug.Log("rel vel " + Vr);
+                        // //nr=vr.n;
+                        // //If this magnitude is greater than zero, the objects are moving away from each other and we can't apply any impulse.
+                        // float Nr = Vector3.Dot(Vr, s.collisionNormal);
+                        // Debug.Log("NR" + Nr);
+                        // if (Nr < 0.0f)
+                        // {
+                        //     //impulse
+                        //     //coefficient of restituion e=min(ea,eb)
+                        //     float e = Mathf.Min(b.rb.restitution, s.restitution);
+                        //     //impulse j=-(1+e)(vr.n)/((1/ma)+(1/mb))
+                        //     float j = -(1 + e) * Nr / ((1 / b.rb.mass) + (1 / s.mass));
+                        //     //tangent vector,t=vr-(vr.n)n=vr-Nr*n
+                        //     Vector3 t = Vr - Nr * s.collisionNormal;
+                        //     //magniture of impulse, jt=-(1+e)(vr.t)/((1/ma)+(1/mb))
+                        //     float jt = -(1 + e) * Vector3.Dot(Vr, t) / ((1 / b.rb.mass) + (1 / s.mass));
+                        //     //friction=sqrt(frictionA,frictionB)
+                        //     float friction = Mathf.Sqrt(b.rb.friction * s.friction);
+                        //     //jt=max(jt,-j*friction)
+                        //     jt = Mathf.Max(jt, -j * friction);
+                        //     //jt=min(jt,j*friction)
+                        //     jt = Mathf.Min(jt, j * friction);
+                        //     //va'=va-jn/ma
+                        //     //write to object
+                        //     //cubes[i].rb.velocity=new Vector3(0.2f,0,0);
+                        //     cubes[i].rb.velocity = (b.rb.velocity - jt * s.collisionNormal.normalized / b.rb.mass)* b.rb.timer;
+                        //    // if (b.name == "Box")
+                        //    // {
+                        //        cubes[i].rb.velocity.y=0;
+                        //        cubes[i].rb.transform.position +=   cubes[i].rb.velocity ;
+                        //       //  Debug.Log("cube old vel " + b.rb.velocity + " " + b.rb.velocity.magnitude);
+
+                        //         Debug.Log("cube new vel " + cubes[i].rb.velocity + ";mag: " + cubes[i].rb.velocity.magnitude + ";ms: " + s.mass + ";mb: " + b.rb.mass + ";rs: " + s.restitution + ";rb: " + b.rb.restitution + ";fs: " + s.friction + ";fb: " + b.rb.friction + ";col " + s.collisionNormal + " " + s.collisionNormal.magnitude+"; timer: "+b.rb.timer);
+
+                        //         spheres[k].vel = s.vel - jt * s.collisionNormal.normalized / s.mass;
+
+                        //    // }
+                        // }
+                        // else
+                        // {
+                        //     cubes[i].rb.velocity =( b.rb.velocity - s.collisionNormal.normalized / b.rb.mass)* b.rb.timer;
+                        // }
+                       // Debug.Log("cube old vel " + b.rb.velocity + " " + b.rb.velocity.magnitude);
+
+                   // }
                 }
 
             }
@@ -100,10 +129,65 @@ public class CollisionManager : MonoBehaviour
 
 
     }
-
-    public static void CheckSphereAABB(BulletBehaviour s, CubeBehaviour b, out bool result)
+public static void CheckAABBCube(BulletBehaviour s, CubeBehaviour b)//, out bool result)
     {
-        result = false;
+       
+        if ((s.min.x <= b.max.x && s.max.x >= b.min.x) &&
+          (s.min.y <= b.max.y && s.max.y >= b.min.y) &&
+          (s.min.z <= b.max.z && s.max.z >= b.min.z))
+        {
+            Debug.Log("bullet and box");
+            // determine the distances between the contact extents
+            float[] distances = {
+                (b.max.x - s.min.x),
+                (s.max.x - b.min.x),
+                (b.max.y - s.min.y),
+                (s.max.y - b.min.y),
+                (b.max.z - s.min.z),
+                (s.max.z - b.min.z)
+            };
+
+            float penetration = float.MaxValue;
+            Vector3 face = Vector3.zero;
+
+            // check each face to see if it is the one that connected
+            for (int i = 0; i < 6; i++)
+            {
+                if (distances[i] < penetration)
+                {
+                    // determine the penetration distance
+                    penetration = distances[i];
+                    face = faces[i];
+                }
+            }
+           
+            s.penetration = penetration;
+            s.collisionNormal = face;
+            
+            Reflect1(s);
+        }
+    }
+    private static void Reflect1(BulletBehaviour s)
+    {
+        s.transform.position -= s.collisionNormal * s.penetration * s.speed; // resolution
+        
+        if ((s.collisionNormal == Vector3.forward) || (s.collisionNormal == Vector3.back))
+        {
+            s.direction = new Vector3(s.direction.x, s.direction.y, -s.direction.z);
+        }
+        else if ((s.collisionNormal == Vector3.right) || (s.collisionNormal == Vector3.left))
+        {
+            s.direction = new Vector3(-s.direction.x, s.direction.y, s.direction.z);
+        }
+        else if ((s.collisionNormal == Vector3.up) || (s.collisionNormal == Vector3.down))
+        {
+            s.direction = new Vector3(s.direction.x, -s.direction.y, s.direction.z);
+        }
+    }
+
+    public static void CheckSphereAABB(BulletBehaviour s, CubeBehaviour b)//, out bool result)
+    {
+       // result = false;
         // get box closest point to sphere center by clamping
         var x = Mathf.Max(b.min.x, Mathf.Min(s.transform.position.x, b.max.x));
         var y = Mathf.Max(b.min.y, Mathf.Min(s.transform.position.y, b.max.y));
@@ -142,9 +226,10 @@ public class CollisionManager : MonoBehaviour
 
             s.penetration = penetration;
             s.collisionNormal = face;
-            b.collisionNormal=face;
-            result = true;
-          
+            b.collisionNormal = face;
+
+         //   result = true;
+
 
             Reflect(s);
         }
@@ -173,7 +258,7 @@ public class CollisionManager : MonoBehaviour
     {
         //collision manifold
         Contact contactB = new Contact(b);
-
+//Debug.Log("Cube"+a.min.x+" "+b.min.x+" "+a.max.x+" "+b.max.x);
         if ((a.min.x <= b.max.x && a.max.x >= b.min.x) &&
             (a.min.y <= b.max.y && a.max.y >= b.min.y) &&
             (a.min.z <= b.max.z && a.max.z >= b.min.z))
@@ -207,7 +292,7 @@ public class CollisionManager : MonoBehaviour
             contactB.face = face;
             contactB.penetration = penetration;
 
-
+            //bool NotRemove=true;
             // check if contact does not exist
             if (!a.contacts.Contains(contactB))
             {
@@ -217,7 +302,93 @@ public class CollisionManager : MonoBehaviour
                     if (a.contacts[i].cube.name.Equals(contactB.cube.name))
                     {
                         a.contacts.RemoveAt(i);
+                        //NotRemove=false;
                     }
+                }
+                if(a.name =="Player" && b.rb.bodyType==BodyType.DYNAMIC)
+                {
+                    //move the box by player
+                    if (a.name == "Player" && b.name=="Box" && b.gameObject.GetComponent<RigidBody3D>().bodyType == BodyType.DYNAMIC)
+                    {                 
+                        Debug.Log("collision with player and box");                           
+                        if (contactB.face == Vector3.left )
+                        {
+                             //Debug.Log("collision with player and box left");
+                        b.gameObject.transform.position += new Vector3(0, 0, Camera.main.transform.forward.z+1)  * penetration;
+                        b.gameObject.GetComponent<RigidBody3D>().velocity = new Vector3( 0, 0,Camera.main.transform.forward.z+1) * Time.deltaTime;
+                        }
+                        else if (contactB.face == Vector3.right )
+                        {
+                        b.gameObject.transform.position += new Vector3(0, 0, Camera.main.transform.forward.z-1) *Time.deltaTime* penetration;
+                        b.gameObject.GetComponent<RigidBody3D>().velocity = new Vector3(0, 0, Camera.main.transform.forward.z-1) * Time.deltaTime;
+                        }
+
+                        else if(contactB.face == Vector3.forward)
+                        {
+                        b.gameObject.transform.position += new Vector3(Camera.main.transform.forward.x-1, 0, 0) * penetration;
+                        b.gameObject.GetComponent<RigidBody3D>().velocity = new Vector3(Camera.main.transform.forward.x-1, 0, 0) * Time.deltaTime;
+                        }
+                        else if(contactB.face == Vector3.back)
+                        {
+                        b.gameObject.transform.position += new Vector3(Camera.main.transform.forward.x+1, 0, 0) * penetration;
+                        b.gameObject.GetComponent<RigidBody3D>().velocity = new Vector3(Camera.main.transform.forward.x+1, 0, 0) * Time.deltaTime;
+                        }
+                       
+                    }
+                    else if (b.gameObject.GetComponent<RigidBody3D>().bodyType == BodyType.DYNAMIC && a.name != "Player" && b.name != "Player")
+                    {
+                       
+                        if (contactB.face == Vector3.forward || contactB.face == Vector3.back || contactB.face == Vector3.left
+                            || contactB.face == Vector3.right)
+                        {
+                            
+                            b.gameObject.GetComponent<RigidBody3D>().velocity = contactB.face *Time.deltaTime;
+                          //  b.gameObject.GetComponent<RigidBody3D>().velocity.y=0;
+                        }
+                    }
+                    // if (contactB.face == Vector3.left)
+                    // {
+                    //      Debug.Log("collision with player and box left");
+                    // b.gameObject.GetComponent<RigidBody3D>().transform.position+=new Vector3(Camera.main.transform.position.x,-1,0)*0.02f*penetration;
+                    // b.rb.velocity=new Vector3(Camera.main.transform.forward.x,0,0)*0.02f;
+                    // }
+                    // else if (contactB.face == Vector3.right)
+                    // {
+                    //      Debug.Log("collision with player and box right");
+                    //     b.gameObject.GetComponent<RigidBody3D>().transform.position+=new Vector3(Camera.main.transform.forward.x,-1,0)*0.02f*penetration;
+                    //     b.rb.velocity=new Vector3(Camera.main.transform.forward.x,0,0)*0.02f;
+                    // }
+                    //  else if (contactB.face == Vector3.forward)
+                    // {
+                    //      Debug.Log("collision with player and box forward "+new Vector3(0,0,1)*0.02f);
+                    //     b.gameObject.GetComponent<RigidBody3D>().transform.position=new Vector3(0,-1,1)*0.02f*penetration;
+                    //     b.rb.velocity=new Vector3(0,0,1)*0.02f;
+                    // }
+                    //  else if (contactB.face == Vector3.back)
+                    // {
+                    //      Debug.Log("collision with player and box back");
+                    //     b.gameObject.GetComponent<RigidBody3D>().transform.position+=new Vector3(0,-1,Camera.main.transform.forward.z)*0.02f*penetration;
+                    //     b.rb.velocity=new Vector3(0,0,Camera.main.transform.forward.z)*0.02f*Time.deltaTime;
+                    // }
+                    
+                    //b.transform.position+=new Vector3(Camera.main.transform.forward.x,0,Camera.main.transform.forward.y)*0.02f*penetration;
+                    //b.rb.velocity=new Vector3(Camera.main.transform.forward.x,0,Camera.main.transform.forward.y)*0.02f;
+                }
+                else if(a.name =="Player" && b.name=="Stair" && b.rb.bodyType==BodyType.STATIC )
+                {
+                    //stair collision
+                    Debug.Log("stair collision");
+                    if (contactB.face == Vector3.forward || contactB.face == Vector3.back || contactB.face == Vector3.left
+                        || contactB.face == Vector3.right)
+                    {
+                        var velocity = new Vector3(-contactB.face.x, Time.deltaTime, -contactB.face.z);
+                        a.gameObject.transform.position += velocity * Time.deltaTime;
+                    }
+                    if (contactB.face == Vector3.down)
+                        {
+                            //a.gameObject.transform.position=b.rb.transform.position+new Vector3(0,1,0);
+                            Debug.Log("ok");
+                        }
                 }
 
                 if (contactB.face == Vector3.down)
@@ -225,6 +396,7 @@ public class CollisionManager : MonoBehaviour
                     a.gameObject.GetComponent<RigidBody3D>().Stop();
                     a.isGrounded = true;
                 }
+
 
 
                 // add the new contact

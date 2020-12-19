@@ -17,6 +17,12 @@ public class BulletBehaviour : MonoBehaviour
     public float restitution;
     public float friction;
     public Vector3 vel;
+    public Bounds bounds;
+     public Vector3 max;
+    public Vector3 min;
+
+    private MeshFilter meshFilter;
+     public Vector3 size;
     public BulletManager bulletManager;
     //public RigidBody3D rb ;//= new RigidBody3D();
 
@@ -28,8 +34,12 @@ public class BulletBehaviour : MonoBehaviour
         restitution=0.8f;
         friction=0.8f;
         mass=1.0f;
-        
-        radius = Mathf.Max(transform.localScale.x, transform.localScale.y, transform.localScale.z) * 0.5f;
+        meshFilter = GetComponent<MeshFilter>();
+      
+        bounds = meshFilter.mesh.bounds;
+        size = bounds.size;
+      //  radius = Mathf.Max(transform.localScale.x, transform.localScale.y, transform.localScale.z) * 0.5f;
+       
         bulletManager = FindObjectOfType<BulletManager>();
        vel=direction * speed;
     }
@@ -37,6 +47,8 @@ public class BulletBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+         max = Vector3.Scale(bounds.max, transform.localScale) + transform.position;
+        min = Vector3.Scale(bounds.min, transform.localScale) + transform.position;
         _Move();
         _CheckBounds();
     }
@@ -46,7 +58,7 @@ public class BulletBehaviour : MonoBehaviour
         // rb.velocity+=direction * speed*Time.deltaTime;
         //Debug.Log("bullet vel "+direction * speed);
         
-        transform.position += vel * Time.deltaTime;
+        transform.position += direction * speed * Time.deltaTime;
     }
 
     private void _CheckBounds()

@@ -56,11 +56,21 @@ public class RigidBody3D : MonoBehaviour
 
                 if (gravityScale > 0)
                 {
-                    Debug.Log("velg "+ velocity+" "+velocity.magnitude);
-                    velocity += acceleration * 0.5f * timer * timer;
+                  //  Debug.Log("rg "+ velocity+" "+velocity.magnitude);
+                    velocity += acceleration * timer *timer;
                      
                     transform.position += velocity;
                 }
+            }
+            else
+            {
+               //  timer += Time.deltaTime;
+              //  velocity += acceleration * Time.deltaTime ;
+              //  velocity.y = 0;
+             //   transform.position += velocity* Time.deltaTime;
+              //  Debug.Log("rg "+ velocity+" "+velocity.magnitude);
+               // velocity += acceleration * 0.5f * timer ;
+              //  transform.position += velocity* timer;
             }
         }
     }
