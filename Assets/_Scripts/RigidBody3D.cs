@@ -33,6 +33,7 @@ public class RigidBody3D : MonoBehaviour
         gravity = -0.001f;
         velocity = Vector3.zero;
         acceleration = new Vector3(0.0f, gravity * gravityScale, 0.0f);
+       
         if (bodyType == BodyType.DYNAMIC)
         {
             isFalling = true;
@@ -55,7 +56,9 @@ public class RigidBody3D : MonoBehaviour
 
                 if (gravityScale > 0)
                 {
+                    Debug.Log("velg "+ velocity+" "+velocity.magnitude);
                     velocity += acceleration * 0.5f * timer * timer;
+                     
                     transform.position += velocity;
                 }
             }

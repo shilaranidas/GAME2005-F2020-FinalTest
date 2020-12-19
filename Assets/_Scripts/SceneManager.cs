@@ -20,4 +20,5 @@ public class SceneManager : MonoBehaviour
     {        
         UnityEngine.SceneManagement.SceneManager.LoadScene("Main",LoadSceneMode.Single);
     }
+    
 }

@@ -40,25 +40,70 @@ public class CollisionManager : MonoBehaviour
                 }
             }
         }
-
+        bool r = false;
         // Check each sphere against each AABB in the scene
-        foreach (var sphere in spheres)
+        //foreach (var s in spheres)
+        for (int k = 0; k < spheres.Length; k++)
         {
-            foreach (var cube in cubes)
+            var s = spheres[k];
+            //foreach (var b in cubes)
+            for (int i = 0; i < cubes.Length; i++)
             {
-                if (cube.name != "Player")
+                var b = cubes[i];
+                if (b.name != "Player")
                 {
-                    CheckSphereAABB(sphere, cube);
+                    r = false;
+                    CheckSphereAABB(s, b, out r);
+                    //calculate Vr=Vb-Va
+                    // Vector3 Vr = b.rb.velocity - s.rb.velocity;
+                    if (r)
+                    {
+                        Vector3 Vr = b.rb.velocity - s.vel;
+                       // Debug.Log("rel vel " + Vr);
+                        //nr=vr.n;
+                        //If this magnitude is greater than zero, the objects are moving away from each other and we can't apply any impulse.
+                        float Nr = Vector3.Dot(Vr, s.collisionNormal.normalized);
+                        Debug.Log("NR"+Nr);
+                        if(Nr>0.0f)
+                        {
+                            //no impulse
+                            //coefficient of restituion e=min(ea,eb)
+                        
+                        
+                        }
+                        float e = Mathf.Min(b.rb.restitution, s.restitution);
+                        //impulse j=-(1+e)(vr.n)/((1/ma)+(1/mb))
+                        float j = -(1 + e) * Nr / ((1 / b.rb.mass) + (1 / s.mass));
+                        //tangent vector,t=vr-(vr.n)n=vr-Nr*n
+                        Vector3 t = Vr - Nr * s.collisionNormal;
+                        //magniture of impulse, jt=-(1+e)(vr.t)/((1/ma)+(1/mb))
+                        float jt = -(1 + e) * Vector3.Dot(Vr, t) / ((1 / b.rb.mass) + (1 / s.mass));
+                        //friction=sqrt(frictionA,frictionB)
+                        float friction = Mathf.Sqrt(b.rb.friction * s.friction);
+                        //jt=max(jt,-j*friction)
+                        jt = Mathf.Max(jt, -j * friction);
+                        //jt=min(jt,j*friction)
+                        jt = Mathf.Min(jt, j * friction);
+                        //va'=va-jn/ma
+                        //write to object
+                      //  cubes[i].rb.velocity 
+                        //b.rb.velocity= b.rb.velocity - jt * s.collisionNormal.normalized / b.rb.mass;
+
+                        Debug.Log("cube vel " + b.rb.velocity+ " "+b.rb.velocity.magnitude);
+                        
+                       // spheres[k].vel = s.vel - jt * s.collisionNormal.normalized / s.mass;
+                    }
                 }
-                
+
             }
         }
 
 
     }
 
-    public static void CheckSphereAABB(BulletBehaviour s, CubeBehaviour b)
+    public static void CheckSphereAABB(BulletBehaviour s, CubeBehaviour b, out bool result)
     {
+        result = false;
         // get box closest point to sphere center by clamping
         var x = Mathf.Max(b.min.x, Mathf.Min(s.transform.position.x, b.max.x));
         var y = Mathf.Max(b.min.y, Mathf.Min(s.transform.position.y, b.max.y));
@@ -70,7 +115,7 @@ public class CollisionManager : MonoBehaviour
 
         if ((distance < s.radius) && (!s.isColliding))
         {
-            
+
             // determine the distances between the contact extents
             float[] distances = {
                 (b.max.x - s.transform.position.x),
@@ -97,34 +142,15 @@ public class CollisionManager : MonoBehaviour
 
             s.penetration = penetration;
             s.collisionNormal = face;
-            s.isColliding = true;
-            //calculate Vr=Vb-Va
-           // Vector3 Vr = b.rb.velocity - s.rb.velocity;
-            //nr=vr.n
-                        
-          /*  float Nr=Vector3.Dot(Vr,s.collisionNormal.normalized);
-            //coefficient of restituion e=min(ea,eb)
-            float e=Mathf.Min(b.rb.restitution,s.rb.restitution);
-            //impulse j=-(1+e)(vr.n)/((1/ma)+(1/mb))
-            float j=-(1+e)*Nr/((1/b.rb.mass)+(1/s.rb.mass));
-            //tangent vector,t=vr-(vr.n)n=vr-Nr*n
-            Vector3 t=Vr-Nr*s.collisionNormal;
-            //magniture of impulse, jt=-(1+e)(vr.t)/((1/ma)+(1/mb))
-            float jt=-(1+e)*Vector3.Dot(Vr,t)/((1/b.rb.mass)+(1/s.rb.mass));
-            //friction=sqrt(frictionA,frictionB)
-            float friction=Mathf.Sqrt(b.rb.friction*s.rb.friction);
-            //jt=max(jt,-j*friction)
-            jt=Mathf.Max(jt, -j*friction);
-            //jt=min(jt,j*friction)
-            jt=Mathf.Min(jt, j*friction);
-            //va'=va-jn/ma
-            b.rb.velocity=b.rb.velocity-jt*s.collisionNormal.normalized/b.rb.mass;
-            s.rb.velocity=s.rb.velocity-jt*s.collisionNormal.normalized/s.rb.mass;*/
+            b.collisionNormal=face;
+            result = true;
+          
+
             Reflect(s);
         }
 
     }
-    
+
     // This helper function reflects the bullet when it hits an AABB face
     private static void Reflect(BulletBehaviour s)
     {
@@ -176,7 +202,7 @@ public class CollisionManager : MonoBehaviour
                     face = faces[i];
                 }
             }
-            
+
             // set the contact properties
             contactB.face = face;
             contactB.penetration = penetration;
@@ -199,12 +225,12 @@ public class CollisionManager : MonoBehaviour
                     a.gameObject.GetComponent<RigidBody3D>().Stop();
                     a.isGrounded = true;
                 }
-                
+
 
                 // add the new contact
                 a.contacts.Add(contactB);
                 a.isColliding = true;
-                
+
             }
         }
         else

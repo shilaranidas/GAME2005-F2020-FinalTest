@@ -31,8 +31,18 @@ public class PlayerBehaviour : MonoBehaviour
     {
         _Fire();
         _Move();
+         _StartScene();
     }
-
+private void _StartScene()
+{
+    if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
+        }
+}
     private void _Move()
     {
         if (isGrounded)

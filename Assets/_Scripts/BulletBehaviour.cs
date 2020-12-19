@@ -13,7 +13,10 @@ public class BulletBehaviour : MonoBehaviour
     public bool isColliding;
     public Vector3 collisionNormal;
     public float penetration;
-
+    public float mass;
+    public float restitution;
+    public float friction;
+    public Vector3 vel;
     public BulletManager bulletManager;
     //public RigidBody3D rb ;//= new RigidBody3D();
 
@@ -22,12 +25,13 @@ public class BulletBehaviour : MonoBehaviour
     {
         isColliding = false;
        // var rb=gameObject.GetComponent<RigidBody3D>();
-      //  rb.restitution=0.1f;
-        //rb.friction=0.1f;
-      //  rb.mass=3.0f;
+        restitution=0.8f;
+        friction=0.8f;
+        mass=1.0f;
         
         radius = Mathf.Max(transform.localScale.x, transform.localScale.y, transform.localScale.z) * 0.5f;
         bulletManager = FindObjectOfType<BulletManager>();
+       vel=direction * speed;
     }
 
     // Update is called once per frame
@@ -40,8 +44,9 @@ public class BulletBehaviour : MonoBehaviour
     private void _Move()
     {
         // rb.velocity+=direction * speed*Time.deltaTime;
+        //Debug.Log("bullet vel "+direction * speed);
         
-        transform.position += direction * speed * Time.deltaTime;
+        transform.position += vel * Time.deltaTime;
     }
 
     private void _CheckBounds()

@@ -59,6 +59,7 @@ public class CubeBehaviour : MonoBehaviour
     public bool isColliding;
     public bool debug;
     public List<Contact> contacts;
+    public Vector3 collisionNormal;
 
     private MeshFilter meshFilter;
     public Bounds bounds;
@@ -73,9 +74,9 @@ public class CubeBehaviour : MonoBehaviour
         rb=GetComponent<RigidBody3D>();
         bounds = meshFilter.mesh.bounds;
         size = bounds.size;
-        rb.restitution=0.1f;
-        rb.friction=0.1f;
-        rb.mass=2.0f;
+        rb.restitution=0.8f;
+        rb.friction=0.6f;
+        rb.mass=5.0f;
     }
 
     // Update is called once per frame
@@ -83,8 +84,19 @@ public class CubeBehaviour : MonoBehaviour
     {
         max = Vector3.Scale(bounds.max, transform.localScale) + transform.position;
         min = Vector3.Scale(bounds.min, transform.localScale) + transform.position;
+        Debug.Log("vel c f "+rb.velocity.magnitude);
+       // if (contactB.face == Vector3.down)
+          //      {
+         //           a.gameObject.GetComponent<RigidBody3D>().Stop();
+         //           a.isGrounded = true;
+          //      }
+        //GetComponent<RigidBody3D>().velocity=rb.velocity;
+        // if(!float.IsNaN(rb.velocity.x) && !float.IsNaN(rb.velocity.y) &&
+        //    !float.IsNaN(rb.velocity.z))
+      //   {
        // rb.velocity+=rb.acceleration*Time.deltaTime;
-        //transform.position+=rb.velocity*Time.deltaTime;
+       // transform.position+=rb.velocity*Time.deltaTime;      
+       //  }
     }
 
     private void OnDrawGizmos()
