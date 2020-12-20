@@ -77,7 +77,7 @@ public class CubeBehaviour : MonoBehaviour
         size = bounds.size;
        // rb.restitution=0.8f;
       //  rb.friction=0.6f;
-       // rb.mass=1.0f;
+        rb.mass=0.5f;
     }
 
     // Update is called once per frame

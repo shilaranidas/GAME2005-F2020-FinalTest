@@ -20,10 +20,10 @@ public class PlayerBehaviour : MonoBehaviour
     public RigidBody3D body;
     public CubeBehaviour cube;
     public Camera playerCam;
-
+    public float F;//player push force
     void start()
     {
-
+        F=12.8f;
     }
 
     // Update is called once per frame

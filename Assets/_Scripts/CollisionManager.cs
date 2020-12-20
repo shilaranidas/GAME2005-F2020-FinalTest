@@ -306,9 +306,16 @@ public static void CheckAABBCube(BulletBehaviour s, CubeBehaviour b)//, out bool
                     }
                 }
                 if(a.name =="Player" && b.rb.bodyType==BodyType.DYNAMIC)
-                {
+                {                                      
+                   
+
+                    // a = F/m
+                    Vector3 impulse = new Vector3(a.GetComponent<PlayerBehaviour>().F * a.rb.velocity.normalized.x / b.rb.mass, 0.0f,a.GetComponent<PlayerBehaviour>().F * a.rb.velocity.normalized.z / b.rb.mass);
+                    b.transform.position +=a.rb.velocity.normalized *  contactB.penetration; 
+                    b.rb.velocity = impulse * Time.deltaTime;
+
                     //move the box by player
-                    if (a.name == "Player" && b.name=="Box" && b.gameObject.GetComponent<RigidBody3D>().bodyType == BodyType.DYNAMIC)
+                  /*  if (a.name == "Player" && b.name=="Box" && b.gameObject.GetComponent<RigidBody3D>().bodyType == BodyType.DYNAMIC)
                     {                 
                         Debug.Log("collision with player and box");                           
                         if (contactB.face == Vector3.left )
@@ -345,34 +352,8 @@ public static void CheckAABBCube(BulletBehaviour s, CubeBehaviour b)//, out bool
                             b.gameObject.GetComponent<RigidBody3D>().velocity = contactB.face *Time.deltaTime;
                           //  b.gameObject.GetComponent<RigidBody3D>().velocity.y=0;
                         }
-                    }
-                    // if (contactB.face == Vector3.left)
-                    // {
-                    //      Debug.Log("collision with player and box left");
-                    // b.gameObject.GetComponent<RigidBody3D>().transform.position+=new Vector3(Camera.main.transform.position.x,-1,0)*0.02f*penetration;
-                    // b.rb.velocity=new Vector3(Camera.main.transform.forward.x,0,0)*0.02f;
-                    // }
-                    // else if (contactB.face == Vector3.right)
-                    // {
-                    //      Debug.Log("collision with player and box right");
-                    //     b.gameObject.GetComponent<RigidBody3D>().transform.position+=new Vector3(Camera.main.transform.forward.x,-1,0)*0.02f*penetration;
-                    //     b.rb.velocity=new Vector3(Camera.main.transform.forward.x,0,0)*0.02f;
-                    // }
-                    //  else if (contactB.face == Vector3.forward)
-                    // {
-                    //      Debug.Log("collision with player and box forward "+new Vector3(0,0,1)*0.02f);
-                    //     b.gameObject.GetComponent<RigidBody3D>().transform.position=new Vector3(0,-1,1)*0.02f*penetration;
-                    //     b.rb.velocity=new Vector3(0,0,1)*0.02f;
-                    // }
-                    //  else if (contactB.face == Vector3.back)
-                    // {
-                    //      Debug.Log("collision with player and box back");
-                    //     b.gameObject.GetComponent<RigidBody3D>().transform.position+=new Vector3(0,-1,Camera.main.transform.forward.z)*0.02f*penetration;
-                    //     b.rb.velocity=new Vector3(0,0,Camera.main.transform.forward.z)*0.02f*Time.deltaTime;
-                    // }
-                    
-                    //b.transform.position+=new Vector3(Camera.main.transform.forward.x,0,Camera.main.transform.forward.y)*0.02f*penetration;
-                    //b.rb.velocity=new Vector3(Camera.main.transform.forward.x,0,Camera.main.transform.forward.y)*0.02f;
+                    }*/
+                                                           
                 }
                 else if(a.name =="Player" && b.name=="Stair" && b.rb.bodyType==BodyType.STATIC )
                 {
