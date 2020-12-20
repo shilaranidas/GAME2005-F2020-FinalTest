@@ -20,27 +20,51 @@ public class PlayerBehaviour : MonoBehaviour
     public RigidBody3D body;
     public CubeBehaviour cube;
     public Camera playerCam;
+     public RigidBody3D[] rb;
     public float F;//player push force
+    bool StartSimulatin=false;
     void start()
     {
-        F=12.8f;
+        F=12.8f;        
+        StartSimulatin=false;
     }
-
+    
     // Update is called once per frame
     void Update()
     {
+        if(StartSimulatin)
+        {
         _Fire();
         _Move();
+        }
         _StartScene();
+        _Activate();
     }
+     /*void OnGUI()
+     {
+          if (GUI.Button(new Rect(100, 0, 150, 30), "Back to Main Menu"))
+        {            
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
+        }
+     }*/
+      private void _Activate()
+      {
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+
+          StartSimulatin=!StartSimulatin;        
+        }
+      }
     private void _StartScene()
     {
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
 
             Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
+            Cursor.lockState = CursorLockMode.None;         
+           UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
         }
     }
     private void _Move()

@@ -39,7 +39,7 @@ public class RigidBody3D : MonoBehaviour
             isFalling = true;
         }
     }
-
+   
     // Update is called once per frame
     void Update()
     {
@@ -66,7 +66,7 @@ public class RigidBody3D : MonoBehaviour
             {
                //  timer += Time.deltaTime;
               //  velocity += acceleration * Time.deltaTime ;
-              //  velocity.y = 0;
+                velocity.y = 0;
              //   transform.position += velocity* Time.deltaTime;
               //  Debug.Log("rg "+ velocity+" "+velocity.magnitude);
                // velocity += acceleration * 0.5f * timer ;
